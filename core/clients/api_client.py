@@ -3,6 +3,8 @@ from http.client import responses
 import requests
 import os
 from dotenv import load_dotenv
+from requests.auth import HTTPBasicAuth
+
 from core.settings.environments import Environment
 from core.clients.endpoints import Endpoints
 from core.settings.config import Users, Timeout
@@ -74,6 +76,16 @@ class APIClient:
             if status_code:
                 assert response.status_code == status_code, f"Expected status {status_code} but got {response.status_code}"
             return response.json()
+
+    def delete_booking(self, booking_id):
+        with allure.step('Deleting booking'):
+            url = f"{self.base_url}/booking/{booking_id}"
+            response = self.session.delete(url, auth=HTTPBasicAuth(USERNAME, PASSWORD))
+            response.raise_for_status()
+        with allure.step('Checking status code'):
+            assert response.status_code == 201, f"Expected status 201 but got {response.status_code}"
+        return response.status_code == 201
+
 
 
 
