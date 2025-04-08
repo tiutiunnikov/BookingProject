@@ -2,6 +2,7 @@ import  allure
 import  pytest
 import requests
 
+
 @allure.feature('Test Ping')
 @allure.story('Test connection')
 def test_ping(api_client):
